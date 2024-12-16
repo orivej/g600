@@ -1,0 +1,10 @@
+[package]
+name = "g600"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+hidraw = "0.0.7"
+serde = { version = "1.0.216", features = ["derive"] }
+serde_yaml = "0.9.34"
+static_assertions = "1.1.0"
