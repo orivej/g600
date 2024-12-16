@@ -162,7 +162,7 @@ fn read_profiles(dev: &mut hidraw::Device) -> Result<Profiles> {
 }
 
 fn main() {
-    let mut dev = Device::open("/dev/hidraw2").unwrap();
+    let mut dev = Device::open("/dev/hidraw1").unwrap();
     let apr = get_active_profile_report(&mut dev).unwrap();
     _ = apr.profile();
     _ = apr.resolution();
