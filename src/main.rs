@@ -170,5 +170,5 @@ fn main() {
     // println!("profile = {:?}", apr.profile());
     // println!("resolution = {:?}", apr.resolution());
     let prs = read_profiles(&mut dev).unwrap();
-    println!("{}", serde_yaml::to_string(&prs).unwrap());
+    print!("{}", serde_yaml::to_string(&prs).unwrap());
 }
