@@ -161,6 +161,19 @@ fn read_profiles(dev: &mut hidraw::Device) -> Result<Profiles> {
     Ok(Profiles{profiles: profiles.try_into().unwrap()})
 }
 
+fn write_profile(dev: &mut hidraw::Device, id: u8, profile: &mut Profile) -> Result<()> {
+    profile.id = id;
+    dev.send_feature_report::<Profile>(profile)
+}
+
+fn write_profiles(dev: &mut hidraw::Device, profiles: &mut Profiles) -> Result<()> {
+    for i in 0..NUM_PROFILES {
+        write_profile(dev, PROFILE_REPORT_ID[i], &mut profiles.profiles[i])?
+    };
+    Ok(())
+}
+
+
 fn main() {
     let mut dev = Device::open("/dev/hidraw1").unwrap();
     let apr = get_active_profile_report(&mut dev).unwrap();
@@ -169,6 +182,7 @@ fn main() {
     // println!("{apr:?}");
     // println!("profile = {:?}", apr.profile());
     // println!("resolution = {:?}", apr.resolution());
-    let prs = read_profiles(&mut dev).unwrap();
-    print!("{}", serde_yaml::to_string(&prs).unwrap());
+    let mut profiles = read_profiles(&mut dev).unwrap();
+    print!("{}", serde_yaml::to_string(&profiles).unwrap());
+    write_profiles(&mut dev, &mut profiles).unwrap();
 }
