@@ -83,9 +83,9 @@ fn is_zero(x: &u8) -> bool {
 #[repr(C, packed)]
 #[derive(Clone, Copy, Debug, Serialize)]
 struct Color {
-    red: u8,
-    green: u8,
-    blue: u8,
+    r: u8,
+    g: u8,
+    b: u8,
 }
 
 #[repr(C, packed)]
