@@ -13,9 +13,8 @@ const PROFILE_REPORT_ID: [u8; NUM_PROFILES] = [0xF3, 0xF4, 0xF5];
 
 #[allow(dead_code)]
 #[repr(u8)]
-#[derive(Clone, Copy, Debug, Default, Serialize)]
+#[derive(Clone, Copy, Debug, Serialize)]
 enum LedEffect {
-    #[default]
     Solid,
     Breath,
     Cycle,
@@ -23,9 +22,8 @@ enum LedEffect {
 
 #[allow(dead_code)]
 #[repr(u8)]
-#[derive(Clone, Copy, Debug, Default, Serialize)]
+#[derive(Clone, Copy, Debug, Serialize)]
 enum ReportRate {
-    #[default]
     Hz1000,
     Hz500,
     Hz333,
@@ -38,9 +36,8 @@ enum ReportRate {
 
 #[allow(dead_code)]
 #[repr(u8)]
-#[derive(Clone, Copy, Debug, Default, Serialize)]
+#[derive(Clone, Copy, Debug, Serialize)]
 enum ButtonAction {
-    #[default]
     Key,
     Button1,
     Button2,
@@ -66,9 +63,8 @@ impl ButtonAction {
 
 #[allow(dead_code)]
 #[repr(u8)]
-#[derive(Clone, Copy, Debug, Default, Serialize)]
+#[derive(Clone, Copy, Debug, Serialize)]
 enum KeyModifier {
-    #[default]
     None = 0,
     LeftCtrl = 0x01,
     LeftShift = 0x02,
@@ -85,7 +81,7 @@ fn is_zero(x: &u8) -> bool {
 }
 
 #[repr(C, packed)]
-#[derive(Clone, Copy, Debug, Default, Serialize)]
+#[derive(Clone, Copy, Debug, Serialize)]
 struct Color {
     red: u8,
     green: u8,
@@ -93,7 +89,7 @@ struct Color {
 }
 
 #[repr(C, packed)]
-#[derive(Clone, Copy, Debug, Default, Serialize)]
+#[derive(Clone, Copy, Debug, Serialize)]
 struct Button {
     #[serde(skip_serializing_if = "ButtonAction::is_default")]
     action: ButtonAction,
@@ -104,7 +100,7 @@ struct Button {
 }
 
 #[repr(C, packed)]
-#[derive(Debug, Default, Serialize)]
+#[derive(Debug, Serialize)]
 struct Profile {
     #[serde(skip_serializing)]
     id: u8,
@@ -126,7 +122,7 @@ struct Profile {
 
 const_assert_eq!(std::mem::size_of::<Profile>(), 154);
 
-#[derive(Debug, Default, Serialize)]
+#[derive(Debug, Serialize)]
 struct Profiles {
     profiles: [Profile; NUM_PROFILES],
 }
@@ -158,21 +154,18 @@ fn read_profile(dev: &mut hidraw::Device, id: u8) -> Result<Profile> {
 }
 
 fn read_profiles(dev: &mut hidraw::Device) -> Result<Profiles> {
-    let mut profiles: Profiles = Default::default();
+    let mut profiles = Vec::new();
     for i in 0..NUM_PROFILES {
-        profiles.profiles[i] = match read_profile(dev, PROFILE_REPORT_ID[i]) {
-            Ok(v) => v,
-            Err(e) => {
-                return Err(e);
-            }
-        }
+        profiles.push(read_profile(dev, PROFILE_REPORT_ID[i])?)
     }
-    Ok(profiles)
+    Ok(Profiles{profiles: profiles.try_into().unwrap()})
 }
 
 fn main() {
     let mut dev = Device::open("/dev/hidraw2").unwrap();
-    // let apr = get_active_profile_report(&mut dev).unwrap();
+    let apr = get_active_profile_report(&mut dev).unwrap();
+    _ = apr.profile();
+    _ = apr.resolution();
     // println!("{apr:?}");
     // println!("profile = {:?}", apr.profile());
     // println!("resolution = {:?}", apr.resolution());
