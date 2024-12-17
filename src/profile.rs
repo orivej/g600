@@ -167,17 +167,25 @@ impl Profiles {
 #[repr(C, packed)]
 pub struct ActiveProfile {
     id: u8,
-    info: u8, // unused:1, resolution:2, unused:1, profile:4
+    info: u8, // unused:1, resolution:2, unused:1, profile:2, set_resolution:1, set_profile: 1
     unused: u16,
 }
 
 impl ActiveProfile {
     fn profile(&self) -> u8 {
-        self.info >> 4
+        (self.info >> 4) & 3
     }
 
     fn resolution(&self) -> u8 {
-        (self.info >> 1) & 0x03
+        (self.info >> 1) & 3
+    }
+
+    pub fn profile_request(id: u8, profile: u8) -> ActiveProfile {
+        ActiveProfile{id: id, info: 0x80 | (profile << 4), unused: 0}
+    }
+
+    pub fn resolution_request(id: u8, resolution: u8) -> ActiveProfile {
+        ActiveProfile{id: id, info: 0x40 | (resolution << 1), unused: 0}
     }
 }
 

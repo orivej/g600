@@ -6,7 +6,7 @@ use hidraw::Device;
 use serde_yaml;
 use std::io::Read;
 
-use device::{get_active_profile_report, read_profiles, write_profiles};
+use device::{get_active_profile, set_active_profile, set_resolution, read_profiles, write_profiles};
 use profile::Profiles;
 
 #[derive(Parser)]
@@ -21,8 +21,15 @@ struct Cli {
 
 #[derive(Subcommand)]
 enum Command {
-    /// Print active profile
-    Active {},
+    /// Print or change active profile
+    Active {
+        /// Set active profile (0-2)
+        #[arg(short, long)]
+        profile: Option<u8>,
+        /// Set active resolution (0-3)
+        #[arg(short, long)]
+        resolution: Option<u8>,
+    },
     /// Read profiles from the mouse and print them to stdout as Yaml
     Read {},
     /// Parse profiles from stdin as Yaml and write them to the mouse
@@ -35,9 +42,16 @@ fn main() {
     let mut dev = Device::open(args.dev).unwrap();
 
     match args.command {
-        Command::Active {} => {
-            let apr = get_active_profile_report(&mut dev).unwrap();
-            println!("{apr}");
+        Command::Active { profile, resolution } => {
+            if profile.is_some() {
+                set_active_profile(&mut dev, profile.unwrap()).unwrap()
+            }
+            if resolution.is_some() {
+                set_resolution(&mut dev, resolution.unwrap()).unwrap()
+            }
+            if profile.is_none() && resolution.is_none() {
+                println!("{}", get_active_profile(&mut dev).unwrap());
+            }
         }
         Command::Read {} => {
             let profiles = read_profiles(&mut dev).unwrap();

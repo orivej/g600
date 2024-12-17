@@ -5,8 +5,18 @@ use crate::profile::{NUM_PROFILES, ActiveProfile, Profile, Profiles};
 const ACTIVE_PROFILE_REPORT_ID: u8 = 0xF0;
 const PROFILE_REPORT_ID: [u8; NUM_PROFILES] = [0xF3, 0xF4, 0xF5];
 
-pub fn get_active_profile_report(dev: &mut Device) -> Result<ActiveProfile> {
+pub fn get_active_profile(dev: &mut Device) -> Result<ActiveProfile> {
     dev.get_feature_report::<ActiveProfile>(ACTIVE_PROFILE_REPORT_ID)
+}
+
+pub fn set_active_profile(dev: &mut Device, profile: u8) -> Result<()> {
+    let ap = ActiveProfile::profile_request(ACTIVE_PROFILE_REPORT_ID, profile);
+    dev.send_feature_report::<ActiveProfile>(&ap)
+}
+
+pub fn set_resolution(dev: &mut Device, resolution: u8) -> Result<()> {
+    let ap = ActiveProfile::resolution_request(ACTIVE_PROFILE_REPORT_ID, resolution);
+    dev.send_feature_report::<ActiveProfile>(&ap)
 }
 
 fn read_profile(dev: &mut Device, id: u8) -> Result<Profile> {
