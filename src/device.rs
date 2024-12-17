@@ -14,6 +14,10 @@ impl G600 {
         G600{dev}
     }
 
+    pub fn open(path: String) -> Result<G600> {
+        Ok(G600::new(Device::open(path)?))
+    }
+
     pub fn get_active_profile(&mut self) -> Result<ActiveProfile> {
         self.dev.get_feature_report::<ActiveProfile>(ACTIVE_PROFILE_REPORT_ID)
     }

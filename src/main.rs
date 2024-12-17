@@ -2,7 +2,6 @@ mod device;
 mod profile;
 
 use clap::{Parser, Subcommand};
-use hidraw::Device;
 use serde_yaml;
 use std::io::Read;
 
@@ -39,7 +38,7 @@ enum Command {
 fn main() {
     let args = Cli::parse();
 
-    let mut dev = G600::new(Device::open(args.dev).unwrap());
+    let mut dev = G600::open(args.dev).unwrap();
 
     match args.command {
         Command::Active { profile, resolution } => {
