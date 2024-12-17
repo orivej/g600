@@ -6,7 +6,7 @@ use hidraw::Device;
 use serde_yaml;
 use std::io::Read;
 
-use device::{get_active_profile, set_active_profile, set_resolution, read_profiles, write_profiles};
+use device::G600;
 use profile::Profiles;
 
 #[derive(Parser)]
@@ -39,22 +39,22 @@ enum Command {
 fn main() {
     let args = Cli::parse();
 
-    let mut dev = Device::open(args.dev).unwrap();
+    let mut dev = G600::new(Device::open(args.dev).unwrap());
 
     match args.command {
         Command::Active { profile, resolution } => {
             if profile.is_some() {
-                set_active_profile(&mut dev, profile.unwrap()).unwrap()
+                dev.set_active_profile(profile.unwrap()).unwrap()
             }
             if resolution.is_some() {
-                set_resolution(&mut dev, resolution.unwrap()).unwrap()
+                dev.set_resolution(resolution.unwrap()).unwrap()
             }
             if profile.is_none() && resolution.is_none() {
-                println!("{}", get_active_profile(&mut dev).unwrap());
+                println!("{}", dev.get_active_profile().unwrap());
             }
         }
         Command::Read {} => {
-            let profiles = read_profiles(&mut dev).unwrap();
+            let profiles = dev.read_profiles().unwrap();
             print!("{}", serde_yaml::to_string(&profiles).unwrap());
         }
         Command::Write {} => {
@@ -62,7 +62,7 @@ fn main() {
             std::io::stdin().read_to_string(&mut input).unwrap();
             let mut profiles: Profiles = serde_yaml::from_str(input.as_str()).unwrap();
             profiles.propagate_gshift();
-            write_profiles(&mut dev, &mut profiles).unwrap();
+            dev.write_profiles(&mut profiles).unwrap();
         }
     }
 }
