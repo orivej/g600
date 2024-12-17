@@ -8,6 +8,12 @@ use std::io::Read;
 
 const NUM_PROFILES: usize = 3;
 const NUM_DPI: usize = 4;
+// Buttons (as labeled on the mouse):
+// 1 2 6: index, middle, ring finger buttons
+// 3 4 5: wheel down, left, right
+// 8 7: below wheel
+// 9-20: thumb buttons
+const NUM_BUTTONS: usize = 20;
 // const DPI_MIN: u16 = 200;
 // const DPI_MAX: u16 = 8200;
 
@@ -40,17 +46,34 @@ enum ReportRate {
 enum ButtonAction {
     #[default]
     Key,
-    M1, // Default for left click
-    M2, // Default for right click
-    M3, // Default for wheel click
-    M4, // Default for wheel left
-    M5, // Default for wheel right
-    IncResolution = 0x11,
-    DecResolution,
-    NextResolution, // Default for G7 in the last profile
-    NextProfile,    // Default for G8 in all profiles
-    GResolution,    // Default for ring finger (G6) in the last profile
-    GButtons = 0x17, // Default for ring finger (G6) in the first two profiles
+    LeftClick,
+    RightClick,
+    WheelClick,
+    WheelLeft,
+    WheelRight,
+    M10,
+    M11,
+    M12,
+    M13,
+    M14,
+    M15,
+    M16,
+    M17,
+    M18,
+    M19,
+    M20,
+    DPIUp = 0x11,    // dpis: 0 -> 1 -> 2 -> 3 -> 3
+    DPIDown,         // dpis: 3 -> 2 -> 1 -> 0 -> 0
+    DPICycle,        // dpis: 0 -> 1 -> 2 -> 3 -> 0
+    ProfileCycle,    // Default for G8 in all profiles
+    DPIShift,        // dpi = dpi_shift while DPIShift button is pressed.
+    DPIDefault,      // dpis: -> dpi_default
+    GShift = 0x17,   // Default for ring finger (G6) in the first two profiles
+    M11a,            // Same effect as M11
+    M12a,            // Same effect as M12
+    X1A,
+    X1B,
+    X1C,
 }
 
 impl ButtonAction {
@@ -66,14 +89,14 @@ impl ButtonAction {
 #[derive(Clone, Copy, Debug, Serialize, Deserialize)]
 enum KeyModifier {
     None = 0,
-    LeftCtrl = 0x01,
-    LeftShift = 0x02,
-    LeftAlt = 0x04,
-    LeftMeta = 0x08,
-    RightCtrl = 0x10,
-    RightShift = 0x20,
-    RightAlt = 0x40,
-    RightMeta = 0x80,
+    Ctrl = 0x01,
+    Shift = 0x02,
+    Alt = 0x04,
+    Meta = 0x08,
+    RCtrl = 0x10,
+    RShift = 0x20,
+    RAlt = 0x40,
+    RMeta = 0x80,
 }
 
 fn is_zero(x: &u8) -> bool {
@@ -110,21 +133,42 @@ struct Profile {
     #[serde(skip_serializing, default)]
     unknown1: [u8; 5],
     report_rate: ReportRate,
-    g_dpi: u8,           // dpi = value * 50; dpi is between 200 and 8200; 0 is disabled
+    dpi_shift: u8,       // dpi = value * 50; dpi is between 200 and 8200; 0 is disabled
     dpi_default: u8,     // between 1 and 4
     dpis: [u8; NUM_DPI], // dpi = value * 50; dpi is between 200 and 8200; 0 is disabled
     #[serde(skip_serializing, default)]
     unknown2: [u8; 13],
-    buttons: [Button; 20],
+    buttons: [Button; NUM_BUTTONS],
     g_led_color: Color,
-    g_buttons: [Button; 20],
+    g_buttons: [Button; NUM_BUTTONS],
 }
 
 const_assert_eq!(std::mem::size_of::<Profile>(), 154);
 
+impl Profile {
+    fn propagate_gshift(&mut self) {
+        for (i, button) in self.buttons.iter_mut().enumerate() {
+            match button.action {
+                ButtonAction::GShift => {
+                    self.g_buttons[i].action = ButtonAction::GShift;
+                }
+                _ => {}
+            }
+        }
+    }
+}
+
 #[derive(Debug, Serialize, Deserialize)]
 struct Profiles {
     profiles: [Profile; NUM_PROFILES],
+}
+
+impl Profiles {
+    fn propagate_gshift(&mut self) {
+        for profile in self.profiles.iter_mut() {
+            profile.propagate_gshift();
+        }
+    }
 }
 
 #[repr(C, packed)]
@@ -190,6 +234,7 @@ struct Cli {
     /// Device path
     #[arg(long, value_name = "PATH", default_value = "/dev/hidraw1")]
     dev: String,
+    /// Print internal representation of profiles
     #[command(subcommand)]
     command: Command,
 }
@@ -222,6 +267,7 @@ fn main() {
             let mut input = String::new();
             std::io::stdin().read_to_string(&mut input).unwrap();
             let mut profiles: Profiles = serde_yaml::from_str(input.as_str()).unwrap();
+            profiles.propagate_gshift();
             write_profiles(&mut dev, &mut profiles).unwrap();
         }
     }
