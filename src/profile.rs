@@ -98,13 +98,7 @@ fn is_zero(x: &u8) -> bool {
     *x == 0
 }
 
-#[repr(C, packed)]
-#[derive(Clone, Copy, Debug, Serialize, Deserialize)]
-struct Color {
-    r: u8,
-    g: u8,
-    b: u8,
-}
+type Color = [u8; 3];
 
 #[repr(C, packed)]
 #[derive(Clone, Copy, Debug, Serialize, Deserialize)]
@@ -122,6 +116,7 @@ struct Button {
 pub struct Profile {
     #[serde(skip_serializing, default)]
     pub id: u8,
+    #[serde(serialize_with = "hex::serialize_upper", deserialize_with = "hex::deserialize")]
     led_color: Color,
     led_effect: LedEffect,
     led_duration: u8, // 0 to 15 seconds
@@ -134,6 +129,7 @@ pub struct Profile {
     #[serde(skip_serializing, default)]
     unknown2: [u8; 13],
     buttons: [Button; NUM_BUTTONS],
+    #[serde(serialize_with = "hex::serialize_upper", deserialize_with = "hex::deserialize")]
     g_led_color: Color,
     g_buttons: [Button; NUM_BUTTONS],
 }
