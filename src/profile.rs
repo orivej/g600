@@ -1,6 +1,7 @@
-use std::fmt;
+use enumset::{EnumSet, EnumSetType};
 use serde::{Deserialize, Serialize};
 use static_assertions::const_assert_eq;
+use std::fmt;
 
 // Buttons (as labeled on the mouse):
 // 1 2 6: index, middle, ring finger buttons
@@ -78,19 +79,20 @@ impl ButtonAction {
     }
 }
 
-#[repr(u8)]
-#[derive(Clone, Copy, Debug, Serialize, Deserialize)]
-enum KeyModifier {
-    None = 0,
-    Ctrl = 0x01,
-    Shift = 0x02,
-    Alt = 0x04,
-    Meta = 0x08,
-    RCtrl = 0x10,
-    RShift = 0x20,
-    RAlt = 0x40,
-    RMeta = 0x80,
+#[derive(Debug, Serialize, Deserialize, EnumSetType)]
+#[enumset(repr = "u8", serialize_repr = "list")]
+enum Modifier {
+    Ctrl,
+    Shift,
+    Alt,
+    Meta,
+    RCtrl,
+    RShift,
+    RAlt,
+    RMeta,
 }
+
+type Modifiers = EnumSet<Modifier>;
 
 fn is_zero(x: &u8) -> bool {
     *x == 0
@@ -109,8 +111,8 @@ struct Color {
 struct Button {
     #[serde(skip_serializing_if = "ButtonAction::is_default", default)]
     action: ButtonAction,
-    #[serde(skip_serializing_if = "is_zero", default)]
-    modifiers: u8,
+    #[serde(skip_serializing_if = "EnumSet::is_empty", default)]
+    modifiers: Modifiers,
     #[serde(skip_serializing_if = "is_zero", default)]
     key: u8,
 }
