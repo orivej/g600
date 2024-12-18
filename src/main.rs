@@ -1,12 +1,13 @@
 mod device;
 mod profile;
 
-use clap::{Parser, Subcommand};
-use serde_yaml;
 use std::io::Read;
 
-use device::G600;
-use profile::Profiles;
+use clap::{Parser, Subcommand};
+use serde_yaml;
+
+use crate::device::G600;
+use crate::profile::Profiles;
 
 #[derive(Parser)]
 struct Cli {
@@ -41,12 +42,15 @@ fn main() {
     let mut dev = G600::open(args.dev).unwrap();
 
     match args.command {
-        Command::Active { profile, resolution } => {
+        Command::Active {
+            profile,
+            resolution,
+        } => {
             if profile.is_some() {
-                dev.set_active_profile(profile.unwrap()).unwrap()
+                dev.set_active_profile(profile.unwrap()).unwrap();
             }
             if resolution.is_some() {
-                dev.set_resolution(resolution.unwrap()).unwrap()
+                dev.set_resolution(resolution.unwrap()).unwrap();
             }
             if profile.is_none() && resolution.is_none() {
                 println!("{}", dev.get_active_profile().unwrap());

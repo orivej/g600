@@ -55,15 +55,15 @@ enum ButtonAction {
     M18,
     M19,
     M20,
-    DPIUp = 0x11,    // dpis: 0 -> 1 -> 2 -> 3 -> 3
-    DPIDown,         // dpis: 3 -> 2 -> 1 -> 0 -> 0
-    DPICycle,        // dpis: 0 -> 1 -> 2 -> 3 -> 0
-    ProfileCycle,    // Default for G8 in all profiles
-    DPIShift,        // dpi = dpi_shift while DPIShift button is pressed.
-    DPIDefault,      // dpis: -> dpi_default
-    GShift = 0x17,   // Default for ring finger (G6) in the first two profiles
-    M11a,            // Same effect as M11
-    M12a,            // Same effect as M12
+    DPIUp,        // dpis: 0 -> 1 -> 2 -> 3 -> 3
+    DPIDown,      // dpis: 3 -> 2 -> 1 -> 0 -> 0
+    DPICycle,     // dpis: 0 -> 1 -> 2 -> 3 -> 0
+    ProfileCycle, // Default for G8 in all profiles
+    DPIShift,     // dpi = dpi_shift while DPIShift button is pressed.
+    DPIDefault,   // dpis: -> dpi_default
+    GShift,       // Default for ring finger (G6) in the first two profiles
+    M11a,         // Same effect as M11
+    M12a,         // Same effect as M12
     X1A,
     X1B,
     X1C,

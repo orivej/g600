@@ -1,6 +1,6 @@
 use hidraw::{Device, Result};
 
-use crate::profile::{NUM_PROFILES, ActiveProfile, Profile, Profiles};
+use crate::profile::{ActiveProfile, Profile, Profiles, NUM_PROFILES};
 
 const ACTIVE_PROFILE_REPORT_ID: u8 = 0xF0;
 const PROFILE_REPORT_ID: [u8; NUM_PROFILES] = [0xF3, 0xF4, 0xF5];
@@ -11,7 +11,7 @@ pub struct G600 {
 
 impl G600 {
     pub fn new(dev: Device) -> G600 {
-        G600{dev}
+        G600 { dev }
     }
 
     pub fn open(path: String) -> Result<G600> {
@@ -39,7 +39,7 @@ impl G600 {
     pub fn read_profiles(&mut self) -> Result<Profiles> {
         let mut profiles = Vec::new();
         for i in 0..NUM_PROFILES {
-            profiles.push(self.read_profile(PROFILE_REPORT_ID[i])?)
+            profiles.push(self.read_profile(PROFILE_REPORT_ID[i])?);
         }
         Ok(Profiles {
             profiles: profiles.try_into().unwrap(),
@@ -53,7 +53,7 @@ impl G600 {
 
     pub fn write_profiles(&mut self, profiles: &mut Profiles) -> Result<()> {
         for i in 0..NUM_PROFILES {
-            self.write_profile(PROFILE_REPORT_ID[i], &mut profiles.profiles[i])?
+            self.write_profile(PROFILE_REPORT_ID[i], &mut profiles.profiles[i])?;
         }
         Ok(())
     }
