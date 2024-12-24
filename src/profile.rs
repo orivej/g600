@@ -113,7 +113,7 @@ struct Button {
 }
 
 #[repr(C, packed)]
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Copy, Clone, Debug, Serialize, Deserialize)]
 pub struct Profile {
     #[serde(skip_serializing, default)]
     pub id: u8,
@@ -150,6 +150,7 @@ impl Profile {
     }
 }
 
+#[repr(C, packed)]
 #[derive(Debug, Serialize, Deserialize)]
 pub struct Profiles {
     pub profiles: [Profile; NUM_PROFILES],
