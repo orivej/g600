@@ -6,7 +6,7 @@ use std::io::Read;
 use clap::{Parser, Subcommand};
 use serde_yaml;
 
-use crate::device::G600;
+use crate::device::{ProfilesIO, G600};
 use crate::profile::Profiles;
 
 #[derive(Parser)]
