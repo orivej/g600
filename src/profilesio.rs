@@ -25,7 +25,7 @@ impl ProfilesDump {
 
 impl ProfilesIO for ProfilesDump {
     fn read_profiles(&mut self) -> Result<Profiles> {
-        let mut buf = vec![0u8; NUM_PROFILES * PROFILE_SIZE];
+        let mut buf = [0u8; NUM_PROFILES * PROFILE_SIZE];
         File::open(&self.path)?.read_exact(&mut buf)?;
         Ok(unsafe { transmute_copy(&buf) })
     }

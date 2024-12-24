@@ -157,6 +157,8 @@ pub struct Profiles {
     pub profiles: [Profile; NUM_PROFILES],
 }
 
+const_assert_eq!(std::mem::size_of::<Profiles>(), NUM_PROFILES * PROFILE_SIZE);
+
 impl Profiles {
     pub fn fix_ids(&mut self) {
         for (i, profile) in self.profiles.iter_mut().enumerate() {
