@@ -139,10 +139,10 @@ const_assert_eq!(std::mem::size_of::<Profile>(), 154);
 
 impl Profile {
     fn propagate_gshift(&mut self) {
-        for (i, button) in self.buttons.iter_mut().enumerate() {
+        for (button, g_button) in self.buttons.iter().zip(self.g_buttons.iter_mut()) {
             match button.action {
                 ButtonAction::GShift => {
-                    self.g_buttons[i].action = ButtonAction::GShift;
+                    g_button.action = ButtonAction::GShift;
                 }
                 _ => {}
             }
