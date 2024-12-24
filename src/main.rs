@@ -14,9 +14,9 @@ use crate::device::G600;
 
 #[derive(Parser)]
 struct Cli {
-    /// Device path
-    #[arg(long, value_name = "PATH", default_value = "/dev/hidraw1")]
-    dev: String,
+    /// Device path (e.g. /dev/hidraw1). Default: autodetect
+    #[arg(long, value_name = "PATH")]
+    dev: Option<PathBuf>,
 
     #[command(subcommand)]
     command: Command,

@@ -1,3 +1,7 @@
+use std::fs::{read_dir, read_to_string};
+use std::io;
+use std::path::{Path, PathBuf};
+
 use hidraw::{Device, Result};
 
 use crate::profile::{ActiveProfile, Profile, Profiles, NUM_PROFILES, PROFILE_REPORT_ID};
@@ -10,12 +14,28 @@ pub struct G600 {
 }
 
 impl G600 {
-    pub fn new(dev: Device) -> G600 {
-        G600 { dev }
+    pub fn open(path: Option<impl AsRef<Path>>) -> Result<G600> {
+        let path = match path {
+            Some(path) => path.as_ref().to_path_buf(),
+            None => G600::detect()?,
+        };
+        Ok(G600{dev: Device::open(path)?})
     }
 
-    pub fn open(path: String) -> Result<G600> {
-        Ok(G600::new(Device::open(path)?))
+    fn detect() -> Result<PathBuf> {
+        for entry in read_dir("/sys/bus/hid/devices")? {
+            let entry = entry?;
+            for input in read_dir(entry.path().join("input"))? {
+                let input = input?;
+                let name = read_to_string(input.path().join("name"))?;
+                if name == "Logitech Gaming Mouse G600 Keyboard\n" {
+                    for hidraw in read_dir(entry.path().join("hidraw"))? {
+                        return Ok(PathBuf::from("/dev").join(hidraw?.file_name()))
+                    }
+                }
+            }
+        }
+        Err(io::Error::new(io::ErrorKind::NotFound, "No G600 mouse found"))
     }
 
     pub fn get_active_profile(&mut self) -> Result<ActiveProfile> {
@@ -39,7 +59,6 @@ impl G600 {
     fn write_profile(&mut self, profile: &Profile) -> Result<()> {
         self.dev.send_feature_report::<Profile>(profile)
     }
-
 }
 
 impl ProfilesIO for G600 {
