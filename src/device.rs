@@ -1,13 +1,9 @@
 use hidraw::{Device, Result};
 
 use crate::profile::{ActiveProfile, Profile, Profiles, NUM_PROFILES, PROFILE_REPORT_ID};
+use crate::profilesio::ProfilesIO;
 
 const ACTIVE_PROFILE_REPORT_ID: u8 = 0xF0;
-
-pub trait ProfilesIO {
-    fn read_profiles(&mut self) -> Result<Profiles>;
-    fn write_profiles(&mut self, profiles: &Profiles) -> Result<()>;
-}
 
 pub struct G600 {
     dev: Device,

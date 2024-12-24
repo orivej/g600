@@ -1,13 +1,15 @@
-mod device;
 mod profile;
+mod profilesio;
+mod device;
 
 use std::io::Read;
 
 use clap::{Parser, Subcommand};
 use serde_yaml;
 
-use crate::device::{ProfilesIO, G600};
 use crate::profile::Profiles;
+use crate::profilesio::ProfilesIO;
+use crate::device::G600;
 
 #[derive(Parser)]
 struct Cli {

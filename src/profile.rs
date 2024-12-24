@@ -11,6 +11,7 @@ use std::fmt;
 const NUM_BUTTONS: usize = 20;
 const NUM_DPI: usize = 4;
 pub const NUM_PROFILES: usize = 3;
+pub const PROFILE_SIZE: usize = 154;
 // const DPI_MIN: u16 = 200;
 // const DPI_MAX: u16 = 8200;
 pub const PROFILE_REPORT_ID: [u8; NUM_PROFILES] = [0xF3, 0xF4, 0xF5];
@@ -135,7 +136,7 @@ pub struct Profile {
     g_buttons: [Button; NUM_BUTTONS],
 }
 
-const_assert_eq!(std::mem::size_of::<Profile>(), 154);
+const_assert_eq!(std::mem::size_of::<Profile>(), PROFILE_SIZE);
 
 impl Profile {
     fn propagate_gshift(&mut self) {
