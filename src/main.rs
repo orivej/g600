@@ -2,7 +2,7 @@ mod profile;
 mod profilesio;
 mod device;
 
-use std::io::Read;
+use std::io::{Read, Error};
 use std::path::PathBuf;
 
 use clap::{Parser, Subcommand};
@@ -53,7 +53,7 @@ enum Command {
     },
 }
 
-fn main() {
+fn main() -> Result<(), Error> {
     let args = Cli::parse();
 
     match args.command {
@@ -61,15 +61,15 @@ fn main() {
             profile,
             resolution,
         } => {
-            let mut dev = G600::open(args.dev).unwrap();
+            let mut dev = G600::open(args.dev)?;
             if profile.is_some() {
-                dev.set_active_profile(profile.unwrap()).unwrap();
+                dev.set_active_profile(profile.unwrap())?;
             }
             if resolution.is_some() {
-                dev.set_resolution(resolution.unwrap()).unwrap();
+                dev.set_resolution(resolution.unwrap())?;
             }
             if profile.is_none() && resolution.is_none() {
-                println!("{}", dev.get_active_profile().unwrap());
+                println!("{}", dev.get_active_profile()?);
             }
         }
         Command::Read {
@@ -77,12 +77,12 @@ fn main() {
             output,
         } => {
             let profiles = match input {
-                None => G600::open(args.dev).unwrap().read_profiles().unwrap(),
-                Some(path) => ProfilesDump::new(&path).read_profiles().unwrap(),
+                None => G600::open(args.dev)?.read_profiles()?,
+                Some(path) => ProfilesDump::new(&path).read_profiles()?,
             };
             match output {
                 None => print!("{}", serde_yaml::to_string(&profiles).unwrap()),
-                Some(path) => ProfilesDump::new(&path).write_profiles(&profiles).unwrap(),
+                Some(path) => ProfilesDump::new(&path).write_profiles(&profiles)?,
             };
         }
         Command::Write {
@@ -92,18 +92,20 @@ fn main() {
             let profiles = match input {
                 None => {
                     let mut input = String::new();
-                    std::io::stdin().read_to_string(&mut input).unwrap();
+                    std::io::stdin().read_to_string(&mut input)?;
                     let mut profiles: Profiles = serde_yaml::from_str(input.as_str()).unwrap();
                     profiles.fix_ids();
                     profiles.propagate_gshift();
                     profiles
                 },
-                Some(path) => ProfilesDump::new(&path).read_profiles().unwrap(),
+                Some(path) => ProfilesDump::new(&path).read_profiles()?,
             };
             match output {
-                None => G600::open(args.dev).unwrap().write_profiles(&profiles).unwrap(),
-                Some(path) => ProfilesDump::new(&path).write_profiles(&profiles).unwrap(),
-            }
+                None => G600::open(args.dev)?.write_profiles(&profiles)?,
+                Some(path) => ProfilesDump::new(&path).write_profiles(&profiles)?,
+            };
         }
-    }
+    };
+
+    Ok(())
 }
