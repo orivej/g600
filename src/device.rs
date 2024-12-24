@@ -1,13 +1,12 @@
 use hidraw::{Device, Result};
 
-use crate::profile::{ActiveProfile, Profile, Profiles, NUM_PROFILES};
+use crate::profile::{ActiveProfile, Profile, Profiles, NUM_PROFILES, PROFILE_REPORT_ID};
 
 const ACTIVE_PROFILE_REPORT_ID: u8 = 0xF0;
-const PROFILE_REPORT_ID: [u8; NUM_PROFILES] = [0xF3, 0xF4, 0xF5];
 
 pub trait ProfilesIO {
     fn read_profiles(&mut self) -> Result<Profiles>;
-    fn write_profiles(&mut self, profiles: &mut Profiles) -> Result<()>;
+    fn write_profiles(&mut self, profiles: &Profiles) -> Result<()>;
 }
 
 pub struct G600 {
@@ -41,8 +40,7 @@ impl G600 {
         self.dev.get_feature_report::<Profile>(id)
     }
 
-    fn write_profile(&mut self, id: u8, profile: &mut Profile) -> Result<()> {
-        profile.id = id;
+    fn write_profile(&mut self, profile: &Profile) -> Result<()> {
         self.dev.send_feature_report::<Profile>(profile)
     }
 
@@ -59,9 +57,9 @@ impl ProfilesIO for G600 {
         })
     }
 
-    fn write_profiles(&mut self, profiles: &mut Profiles) -> Result<()> {
-        for i in 0..NUM_PROFILES {
-            self.write_profile(PROFILE_REPORT_ID[i], &mut profiles.profiles[i])?;
+    fn write_profiles(&mut self, profiles: &Profiles) -> Result<()> {
+        for profile in profiles.profiles.iter() {
+            self.write_profile(profile)?;
         }
         Ok(())
     }

@@ -64,6 +64,7 @@ fn main() {
             let mut input = String::new();
             std::io::stdin().read_to_string(&mut input).unwrap();
             let mut profiles: Profiles = serde_yaml::from_str(input.as_str()).unwrap();
+            profiles.fix_ids();
             profiles.propagate_gshift();
             dev.write_profiles(&mut profiles).unwrap();
         }

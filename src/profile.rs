@@ -13,6 +13,7 @@ const NUM_DPI: usize = 4;
 pub const NUM_PROFILES: usize = 3;
 // const DPI_MIN: u16 = 200;
 // const DPI_MAX: u16 = 8200;
+pub const PROFILE_REPORT_ID: [u8; NUM_PROFILES] = [0xF3, 0xF4, 0xF5];
 
 #[repr(u8)]
 #[derive(Clone, Copy, Debug, Serialize, Deserialize)]
@@ -155,6 +156,12 @@ pub struct Profiles {
 }
 
 impl Profiles {
+    pub fn fix_ids(&mut self) {
+        for (i, profile) in self.profiles.iter_mut().enumerate() {
+            profile.id = PROFILE_REPORT_ID[i];
+        }
+    }
+
     pub fn propagate_gshift(&mut self) {
         for profile in self.profiles.iter_mut() {
             profile.propagate_gshift();
