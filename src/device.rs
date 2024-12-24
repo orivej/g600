@@ -19,7 +19,11 @@ impl G600 {
             Some(path) => path.as_ref().to_path_buf(),
             None => G600::detect()?,
         };
-        Ok(G600{dev: Device::open(path)?})
+        let pathstr = path.to_string_lossy().to_string();
+        match Device::open(path) {
+            Ok(dev) => Ok(G600{dev: dev}),
+            Err(err) => Err(io::Error::new(err.kind(), format!("Failed to open {}: {}", &pathstr, err.to_string()))),
+        }
     }
 
     fn detect() -> Result<PathBuf> {
