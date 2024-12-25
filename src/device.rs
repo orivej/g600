@@ -77,7 +77,7 @@ impl ProfilesIO for G600 {
     }
 
     fn write_profiles(&mut self, profiles: &Profiles) -> Result<()> {
-        for profile in profiles.profiles.iter() {
+        for profile in &profiles.profiles {
             self.write_profile(profile)?;
         }
         Ok(())

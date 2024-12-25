@@ -114,7 +114,7 @@ struct Button {
 #[derive(Copy, Clone, Debug, Serialize, Deserialize)]
 pub struct Profile {
     #[serde(skip_serializing, default)]
-    pub id: u8,
+    id: u8,
     #[serde(serialize_with = "hex::serialize_upper", deserialize_with = "hex::deserialize")]
     led_color: Color,
     led_effect: LedEffect,
@@ -138,7 +138,7 @@ const_assert_eq!(std::mem::size_of::<Profile>(), PROFILE_SIZE);
 impl Profile {
     fn propagate_gshift(&mut self) {
         for (button, g_button) in self.buttons.iter().zip(self.g_buttons.iter_mut()) {
-            if let ButtonAction::GShift = button.action {
+            if matches!(button.action, ButtonAction::GShift) {
                 g_button.action = ButtonAction::GShift;
             }
         }
@@ -155,13 +155,13 @@ const_assert_eq!(std::mem::size_of::<Profiles>(), NUM_PROFILES * PROFILE_SIZE);
 
 impl Profiles {
     pub fn fix_ids(&mut self) {
-        for (i, profile) in self.profiles.iter_mut().enumerate() {
-            profile.id = PROFILE_REPORT_ID[i];
+        for (profile, id) in self.profiles.iter_mut().zip(PROFILE_REPORT_ID) {
+            profile.id = id;
         }
     }
 
     pub fn propagate_gshift(&mut self) {
-        for profile in self.profiles.iter_mut() {
+        for profile in &mut self.profiles {
             profile.propagate_gshift();
         }
     }
