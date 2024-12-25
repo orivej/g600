@@ -6,7 +6,6 @@ use std::io::{Read, Error};
 use std::path::PathBuf;
 
 use clap::{Parser, Subcommand};
-use serde_yaml;
 
 use crate::profile::Profiles;
 use crate::profilesio::{ProfilesIO, ProfilesDump};

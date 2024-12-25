@@ -4,7 +4,7 @@ use std::path::{Path, PathBuf};
 
 use hidraw::{Device, Result};
 
-use crate::profile::{ActiveProfile, Profile, Profiles, NUM_PROFILES, PROFILE_REPORT_ID};
+use crate::profile::{ActiveProfile, Profile, Profiles, PROFILE_REPORT_ID};
 use crate::profilesio::ProfilesIO;
 
 const ACTIVE_PROFILE_REPORT_ID: u8 = 0xF0;
@@ -21,8 +21,8 @@ impl G600 {
         };
         let pathstr = path.to_string_lossy().to_string();
         match Device::open(path) {
-            Ok(dev) => Ok(G600{dev: dev}),
-            Err(err) => Err(io::Error::new(err.kind(), format!("Failed to open {}: {}", &pathstr, err.to_string()))),
+            Ok(dev) => Ok(G600{dev}),
+            Err(err) => Err(io::Error::new(err.kind(), format!("Failed to open {}: {}", &pathstr, err))),
         }
     }
 
@@ -33,7 +33,7 @@ impl G600 {
                 let input = input?;
                 let name = read_to_string(input.path().join("name"))?;
                 if name == "Logitech Gaming Mouse G600 Keyboard\n" {
-                    for hidraw in read_dir(entry.path().join("hidraw"))? {
+                    if let Some(hidraw) = read_dir(entry.path().join("hidraw"))?.next() {
                         return Ok(PathBuf::from("/dev").join(hidraw?.file_name()))
                     }
                 }
@@ -68,8 +68,8 @@ impl G600 {
 impl ProfilesIO for G600 {
     fn read_profiles(&mut self) -> Result<Profiles> {
         let mut profiles = Vec::new();
-        for i in 0..NUM_PROFILES {
-            profiles.push(self.read_profile(PROFILE_REPORT_ID[i])?);
+        for id in PROFILE_REPORT_ID {
+            profiles.push(self.read_profile(id)?);
         }
         Ok(Profiles {
             profiles: profiles.try_into().unwrap(),

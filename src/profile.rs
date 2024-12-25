@@ -74,10 +74,7 @@ enum ButtonAction {
 
 impl ButtonAction {
     fn is_default(&self) -> bool {
-        match *self {
-            ButtonAction::Key => true,
-            _ => false,
-        }
+        matches!(*self, ButtonAction::Key)
     }
 }
 
@@ -141,11 +138,8 @@ const_assert_eq!(std::mem::size_of::<Profile>(), PROFILE_SIZE);
 impl Profile {
     fn propagate_gshift(&mut self) {
         for (button, g_button) in self.buttons.iter().zip(self.g_buttons.iter_mut()) {
-            match button.action {
-                ButtonAction::GShift => {
-                    g_button.action = ButtonAction::GShift;
-                }
-                _ => {}
+            if let ButtonAction::GShift = button.action {
+                g_button.action = ButtonAction::GShift;
             }
         }
     }
@@ -190,11 +184,11 @@ impl ActiveProfile {
     }
 
     pub fn profile_request(id: u8, profile: u8) -> ActiveProfile {
-        ActiveProfile{id: id, info: 0x80 | (profile << 4), unused: 0}
+        ActiveProfile{id, info: 0x80 | (profile << 4), unused: 0}
     }
 
     pub fn resolution_request(id: u8, resolution: u8) -> ActiveProfile {
-        ActiveProfile{id: id, info: 0x40 | (resolution << 1), unused: 0}
+        ActiveProfile{id, info: 0x40 | (resolution << 1), unused: 0}
     }
 }
 
