@@ -1,15 +1,15 @@
+mod device;
 mod profile;
 mod profilesio;
-mod device;
 
-use std::io::{Read, Error};
+use std::io::{Error, Read};
 use std::path::PathBuf;
 
 use clap::{Parser, Subcommand};
 
-use crate::profile::Profiles;
-use crate::profilesio::{ProfilesIO, ProfilesDump};
 use crate::device::G600;
+use crate::profile::Profiles;
+use crate::profilesio::{ProfilesDump, ProfilesIO};
 
 #[derive(Parser)]
 struct Cli {
@@ -71,10 +71,7 @@ fn main() -> Result<(), Error> {
                 println!("{}", dev.get_active_profile()?);
             }
         }
-        Command::Read {
-            input,
-            output,
-        } => {
+        Command::Read { input, output } => {
             let profiles = match input {
                 None => G600::open(args.dev)?.read_profiles()?,
                 Some(path) => ProfilesDump::new(&path).read_profiles()?,
@@ -84,10 +81,7 @@ fn main() -> Result<(), Error> {
                 Some(path) => ProfilesDump::new(&path).write_profiles(&profiles)?,
             };
         }
-        Command::Write {
-            input,
-            output,
-        } => {
+        Command::Write { input, output } => {
             let profiles = match input {
                 None => {
                     let mut input = String::new();
@@ -96,7 +90,7 @@ fn main() -> Result<(), Error> {
                     profiles.fix_ids();
                     profiles.propagate_gshift();
                     profiles
-                },
+                }
                 Some(path) => ProfilesDump::new(&path).read_profiles()?,
             };
             match output {

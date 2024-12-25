@@ -21,8 +21,11 @@ impl G600 {
         };
         let pathstr = path.to_string_lossy().to_string();
         match Device::open(path) {
-            Ok(dev) => Ok(G600{dev}),
-            Err(err) => Err(io::Error::new(err.kind(), format!("Failed to open {}: {}", &pathstr, err))),
+            Ok(dev) => Ok(G600 { dev }),
+            Err(err) => Err(io::Error::new(
+                err.kind(),
+                format!("Failed to open {}: {}", &pathstr, err),
+            )),
         }
     }
 
@@ -34,16 +37,20 @@ impl G600 {
                 let name = read_to_string(input.path().join("name"))?;
                 if name == "Logitech Gaming Mouse G600 Keyboard\n" {
                     if let Some(hidraw) = read_dir(entry.path().join("hidraw"))?.next() {
-                        return Ok(PathBuf::from("/dev").join(hidraw?.file_name()))
+                        return Ok(PathBuf::from("/dev").join(hidraw?.file_name()));
                     }
                 }
             }
         }
-        Err(io::Error::new(io::ErrorKind::NotFound, "No G600 mouse found"))
+        Err(io::Error::new(
+            io::ErrorKind::NotFound,
+            "No G600 mouse found",
+        ))
     }
 
     pub fn get_active_profile(&mut self) -> Result<ActiveProfile> {
-        self.dev.get_feature_report::<ActiveProfile>(ACTIVE_PROFILE_REPORT_ID)
+        self.dev
+            .get_feature_report::<ActiveProfile>(ACTIVE_PROFILE_REPORT_ID)
     }
 
     pub fn set_active_profile(&mut self, profile: u8) -> Result<()> {

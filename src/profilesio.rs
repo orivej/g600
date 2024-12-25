@@ -1,8 +1,8 @@
 use std::convert::AsRef;
-use std::fs::{File, write};
+use std::fs::{write, File};
 use std::io::Read;
-use std::path::{Path, PathBuf};
 use std::mem::transmute_copy;
+use std::path::{Path, PathBuf};
 
 use hidraw::Result;
 
@@ -19,7 +19,9 @@ pub struct ProfilesDump {
 
 impl ProfilesDump {
     pub fn new(path: impl AsRef<Path>) -> ProfilesDump {
-        ProfilesDump { path: path.as_ref().to_path_buf() }
+        ProfilesDump {
+            path: path.as_ref().to_path_buf(),
+        }
     }
 }
 

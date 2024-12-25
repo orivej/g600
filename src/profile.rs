@@ -138,7 +138,10 @@ impl<'de> Deserialize<'de> for Dpi {
 pub struct Profile {
     #[serde(skip_serializing, default)]
     id: u8,
-    #[serde(serialize_with = "hex::serialize_upper", deserialize_with = "hex::deserialize")]
+    #[serde(
+        serialize_with = "hex::serialize_upper",
+        deserialize_with = "hex::deserialize"
+    )]
     led_color: Color,
     led_effect: LedEffect,
     led_duration: u8, // 0 to 15 seconds
@@ -151,7 +154,10 @@ pub struct Profile {
     #[serde(skip_serializing, default)]
     unknown2: [u8; 13],
     buttons: [Button; NUM_BUTTONS],
-    #[serde(serialize_with = "hex::serialize_upper", deserialize_with = "hex::deserialize")]
+    #[serde(
+        serialize_with = "hex::serialize_upper",
+        deserialize_with = "hex::deserialize"
+    )]
     g_led_color: Color,
     g_buttons: [Button; NUM_BUTTONS],
 }
@@ -207,11 +213,19 @@ impl ActiveProfile {
     }
 
     pub fn profile_request(id: u8, profile: u8) -> ActiveProfile {
-        ActiveProfile{id, info: 0x80 | (profile << 4), unused: 0}
+        ActiveProfile {
+            id,
+            info: 0x80 | (profile << 4),
+            unused: 0,
+        }
     }
 
     pub fn resolution_request(id: u8, resolution: u8) -> ActiveProfile {
-        ActiveProfile{id, info: 0x40 | (resolution << 1), unused: 0}
+        ActiveProfile {
+            id,
+            info: 0x40 | (resolution << 1),
+            unused: 0,
+        }
     }
 }
 
