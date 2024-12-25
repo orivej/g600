@@ -1,5 +1,5 @@
 use enumset::{EnumSet, EnumSetType};
-use serde::{Deserialize, Serialize};
+use serde::{Deserialize, Deserializer, Serialize, Serializer};
 use static_assertions::const_assert_eq;
 use std::fmt;
 
@@ -111,6 +111,29 @@ struct Button {
 }
 
 #[repr(C, packed)]
+#[derive(Copy, Clone, Debug)]
+struct Dpi(u8);
+
+impl Serialize for Dpi {
+    fn serialize<S>(&self, s: S) -> Result<S::Ok, S::Error>
+    where
+        S: Serializer,
+    {
+        s.serialize_u16(u16::from(self.0) * 50)
+    }
+}
+
+impl<'de> Deserialize<'de> for Dpi {
+    fn deserialize<D>(d: D) -> Result<Dpi, D::Error>
+    where
+        D: Deserializer<'de>,
+    {
+        let dpi = u16::deserialize(d)? / 50;
+        Ok(Dpi(u8::try_from(dpi).map_err(serde::de::Error::custom)?))
+    }
+}
+
+#[repr(C, packed)]
 #[derive(Copy, Clone, Debug, Serialize, Deserialize)]
 pub struct Profile {
     #[serde(skip_serializing, default)]
@@ -122,9 +145,9 @@ pub struct Profile {
     #[serde(skip_serializing, default)]
     unknown1: [u8; 5],
     report_rate: ReportRate,
-    dpi_shift: u8,       // dpi = value * 50; dpi is between 200 and 8200; 0 is disabled
-    dpi_default: u8,     // between 1 and 4
-    dpis: [u8; NUM_DPI], // dpi = value * 50; dpi is between 200 and 8200; 0 is disabled
+    dpi_shift: Dpi,       // dpi is between 200 and 8200; 0 is disabled
+    dpi_default: u8,      // between 1 and 4
+    dpis: [Dpi; NUM_DPI], // dpi is between 200 and 8200; 0 is disabled
     #[serde(skip_serializing, default)]
     unknown2: [u8; 13],
     buttons: [Button; NUM_BUTTONS],
