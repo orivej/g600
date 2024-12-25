@@ -2,6 +2,12 @@
 name = "g600"
 version = "0.1.0"
 edition = "2021"
+description = "Logitech G600 Mouse Configuration Tool For Linux"
+repository = "https://github.com/orivej/g600"
+readme = "README.md"
+license = "Unlicense"
+keywords = ["logitech", "g600", "mouse", "linux"]
+categories = ["command-line-utilities", "hardware-support"]
 
 [dependencies]
 clap = { version = "4.5.23", features = ["derive"] }
