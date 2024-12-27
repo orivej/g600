@@ -1,0 +1,239 @@
+profiles:
+- led_color: '000000'
+  led_effect: Cycle
+  led_duration: 4
+  report_rate: Hz1000
+  dpi_shift: 0
+  dpi_default: 1
+  dpis:
+  - 1200
+  - 0
+  - 0
+  - 0
+  buttons:
+  - action: LeftClick
+  - action: RightClick
+  - action: WheelClick
+  - action: WheelLeft
+  - action: WheelRight
+  - action: GShift
+  - modifiers:
+    - Shift
+    key: 5
+  - action: ProfileCycle
+  - key: 30
+  - key: 31
+  - key: 32
+  - key: 33
+  - key: 34
+  - key: 35
+  - key: 36
+  - key: 37
+  - key: 38
+  - key: 39
+  - key: 45
+  - key: 46
+  g_led_color: '000000'
+  g_buttons:
+  - action: LeftClick
+  - action: RightClick
+  - action: WheelClick
+  - action: WheelLeft
+  - action: WheelRight
+  - action: GShift
+  - action: DPICycle
+  - action: ProfileCycle
+  - modifiers:
+    - Ctrl
+    key: 30
+  - modifiers:
+    - Ctrl
+    key: 31
+  - modifiers:
+    - Ctrl
+    key: 32
+  - modifiers:
+    - Ctrl
+    key: 33
+  - modifiers:
+    - Ctrl
+    key: 34
+  - modifiers:
+    - Ctrl
+    key: 35
+  - modifiers:
+    - Ctrl
+    key: 36
+  - modifiers:
+    - Ctrl
+    key: 37
+  - modifiers:
+    - Ctrl
+    key: 38
+  - modifiers:
+    - Ctrl
+    key: 39
+  - modifiers:
+    - Ctrl
+    key: 45
+  - modifiers:
+    - Ctrl
+    key: 46
+- led_color: FFFFFF
+  led_effect: Solid
+  led_duration: 11
+  report_rate: Hz1000
+  dpi_shift: 0
+  dpi_default: 1
+  dpis:
+  - 1200
+  - 0
+  - 0
+  - 0
+  buttons:
+  - action: LeftClick
+  - action: RightClick
+  - action: WheelClick
+  - action: WheelLeft
+  - action: WheelRight
+  - action: GShift
+  - modifiers:
+    - Shift
+    key: 5
+  - action: ProfileCycle
+  - key: 89
+  - key: 90
+  - key: 91
+  - key: 92
+  - key: 93
+  - key: 94
+  - key: 95
+  - key: 96
+  - key: 97
+  - key: 98
+  - key: 86
+  - key: 87
+  g_led_color: FFFFFF
+  g_buttons:
+  - action: LeftClick
+  - action: RightClick
+  - action: WheelClick
+  - action: WheelLeft
+  - action: WheelRight
+  - action: GShift
+  - action: DPICycle
+  - action: ProfileCycle
+  - modifiers:
+    - Ctrl
+    key: 30
+  - modifiers:
+    - Ctrl
+    key: 31
+  - modifiers:
+    - Ctrl
+    key: 32
+  - modifiers:
+    - Ctrl
+    key: 33
+  - modifiers:
+    - Ctrl
+    key: 34
+  - modifiers:
+    - Ctrl
+    key: 35
+  - modifiers:
+    - Ctrl
+    key: 36
+  - modifiers:
+    - Ctrl
+    key: 37
+  - modifiers:
+    - Ctrl
+    key: 38
+  - modifiers:
+    - Ctrl
+    key: 39
+  - modifiers:
+    - Ctrl
+    key: 45
+  - modifiers:
+    - Ctrl
+    key: 46
+- led_color: 00FF00
+  led_effect: Breath
+  led_duration: 11
+  report_rate: Hz1000
+  dpi_shift: 400
+  dpi_default: 2
+  dpis:
+  - 400
+  - 1200
+  - 2000
+  - 3200
+  buttons:
+  - action: LeftClick
+  - action: RightClick
+  - action: WheelClick
+  - action: WheelLeft
+  - action: WheelRight
+  - action: DPIShift
+  - action: DPICycle
+  - action: ProfileCycle
+  - key: 30
+  - key: 31
+  - key: 32
+  - key: 33
+  - key: 34
+  - key: 35
+  - action: DPIUp
+  - action: DPIDefault
+  - action: WheelRight
+  - action: DPIDown
+  - key: 8
+  - action: WheelLeft
+  g_led_color: 00FF00
+  g_buttons:
+  - action: LeftClick
+  - action: RightClick
+  - action: WheelClick
+  - action: WheelLeft
+  - action: WheelRight
+  - action: GShift
+  - action: DPICycle
+  - action: ProfileCycle
+  - modifiers:
+    - Ctrl
+    key: 30
+  - modifiers:
+    - Ctrl
+    key: 31
+  - modifiers:
+    - Ctrl
+    key: 32
+  - modifiers:
+    - Ctrl
+    key: 33
+  - modifiers:
+    - Ctrl
+    key: 34
+  - modifiers:
+    - Ctrl
+    key: 35
+  - modifiers:
+    - Ctrl
+    key: 36
+  - modifiers:
+    - Ctrl
+    key: 37
+  - modifiers:
+    - Ctrl
+    key: 38
+  - modifiers:
+    - Ctrl
+    key: 39
+  - modifiers:
+    - Ctrl
+    key: 45
+  - modifiers:
+    - Ctrl
+    key: 46
