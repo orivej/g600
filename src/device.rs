@@ -1,6 +1,8 @@
 use std::fs::{read_dir, read_to_string};
 use std::io;
 use std::path::{Path, PathBuf};
+use std::thread::sleep;
+use std::time::Duration;
 
 use hidraw::{Device, Result};
 
@@ -86,6 +88,7 @@ impl ProfilesIO for G600 {
     fn write_profiles(&mut self, profiles: &Profiles) -> Result<()> {
         for profile in &profiles.profiles {
             self.write_profile(profile)?;
+            sleep(Duration::from_millis(300)); // 200 not enough: leads to intermixed profiles
         }
         Ok(())
     }
