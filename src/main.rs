@@ -61,11 +61,11 @@ fn main() -> Result<(), Error> {
             resolution,
         } => {
             let mut dev = G600::open(args.dev)?;
-            if profile.is_some() {
-                dev.set_active_profile(profile.unwrap())?;
+            if let Some(id) = profile {
+                dev.set_active_profile(id)?;
             }
-            if resolution.is_some() {
-                dev.set_resolution(resolution.unwrap())?;
+            if let Some(n) = resolution {
+                dev.set_resolution(n)?;
             }
             if profile.is_none() && resolution.is_none() {
                 println!("{}", dev.get_active_profile()?);
