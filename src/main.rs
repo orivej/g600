@@ -1,4 +1,5 @@
 mod device;
+mod hidkey;
 mod profile;
 mod profilesio;
 

@@ -19,18 +19,18 @@ profiles:
   - action: GShift
   - action: DPICycle
   - action: ProfileCycle
-  - key: 30
-  - key: 31
-  - key: 32
-  - key: 33
-  - key: 34
-  - key: 35
-  - key: 36
-  - key: 37
-  - key: 38
-  - key: 39
-  - key: 45
-  - key: 46
+  - key: _1
+  - key: _2
+  - key: _3
+  - key: _4
+  - key: _5
+  - key: _6
+  - key: _7
+  - key: _8
+  - key: _9
+  - key: _0
+  - key: Minus
+  - key: Equal
   g_led_color: '000000'
   g_buttons:
   - action: LeftClick
@@ -43,40 +43,40 @@ profiles:
   - action: ProfileCycle
   - modifiers:
     - Ctrl
-    key: 30
+    key: _1
   - modifiers:
     - Ctrl
-    key: 31
+    key: _2
   - modifiers:
     - Ctrl
-    key: 32
+    key: _3
   - modifiers:
     - Ctrl
-    key: 33
+    key: _4
   - modifiers:
     - Ctrl
-    key: 34
+    key: _5
   - modifiers:
     - Ctrl
-    key: 35
+    key: _6
   - modifiers:
     - Ctrl
-    key: 36
+    key: _7
   - modifiers:
     - Ctrl
-    key: 37
+    key: _8
   - modifiers:
     - Ctrl
-    key: 38
+    key: _9
   - modifiers:
     - Ctrl
-    key: 39
+    key: _0
   - modifiers:
     - Ctrl
-    key: 45
+    key: Minus
   - modifiers:
     - Ctrl
-    key: 46
+    key: Equal
 - led_color: '000000'
   led_effect: Cycle
   led_duration: 4
@@ -97,18 +97,18 @@ profiles:
   - action: GShift
   - action: DPICycle
   - action: ProfileCycle
-  - key: 30
-  - key: 31
-  - key: 32
-  - key: 33
-  - key: 34
-  - key: 35
-  - key: 36
-  - key: 37
-  - key: 38
-  - key: 39
-  - key: 45
-  - key: 46
+  - key: _1
+  - key: _2
+  - key: _3
+  - key: _4
+  - key: _5
+  - key: _6
+  - key: _7
+  - key: _8
+  - key: _9
+  - key: _0
+  - key: Minus
+  - key: Equal
   g_led_color: '000000'
   g_buttons:
   - action: LeftClick
@@ -121,40 +121,40 @@ profiles:
   - action: ProfileCycle
   - modifiers:
     - Ctrl
-    key: 30
+    key: _1
   - modifiers:
     - Ctrl
-    key: 31
+    key: _2
   - modifiers:
     - Ctrl
-    key: 32
+    key: _3
   - modifiers:
     - Ctrl
-    key: 33
+    key: _4
   - modifiers:
     - Ctrl
-    key: 34
+    key: _5
   - modifiers:
     - Ctrl
-    key: 35
+    key: _6
   - modifiers:
     - Ctrl
-    key: 36
+    key: _7
   - modifiers:
     - Ctrl
-    key: 37
+    key: _8
   - modifiers:
     - Ctrl
-    key: 38
+    key: _9
   - modifiers:
     - Ctrl
-    key: 39
+    key: _0
   - modifiers:
     - Ctrl
-    key: 45
+    key: Minus
   - modifiers:
     - Ctrl
-    key: 46
+    key: Equal
 - led_color: '000000'
   led_effect: Cycle
   led_duration: 4
@@ -175,18 +175,18 @@ profiles:
   - action: GShift
   - action: DPICycle
   - action: ProfileCycle
-  - key: 30
-  - key: 31
-  - key: 32
-  - key: 33
-  - key: 34
-  - key: 35
-  - key: 36
-  - key: 37
-  - key: 38
-  - key: 39
-  - key: 45
-  - key: 46
+  - key: _1
+  - key: _2
+  - key: _3
+  - key: _4
+  - key: _5
+  - key: _6
+  - key: _7
+  - key: _8
+  - key: _9
+  - key: _0
+  - key: Minus
+  - key: Equal
   g_led_color: '000000'
   g_buttons:
   - action: LeftClick
@@ -199,37 +199,37 @@ profiles:
   - action: ProfileCycle
   - modifiers:
     - Ctrl
-    key: 30
+    key: _1
   - modifiers:
     - Ctrl
-    key: 31
+    key: _2
   - modifiers:
     - Ctrl
-    key: 32
+    key: _3
   - modifiers:
     - Ctrl
-    key: 33
+    key: _4
   - modifiers:
     - Ctrl
-    key: 34
+    key: _5
   - modifiers:
     - Ctrl
-    key: 35
+    key: _6
   - modifiers:
     - Ctrl
-    key: 36
+    key: _7
   - modifiers:
     - Ctrl
-    key: 37
+    key: _8
   - modifiers:
     - Ctrl
-    key: 38
+    key: _9
   - modifiers:
     - Ctrl
-    key: 39
+    key: _0
   - modifiers:
     - Ctrl
-    key: 45
+    key: Minus
   - modifiers:
     - Ctrl
-    key: 46
+    key: Equal
