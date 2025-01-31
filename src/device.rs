@@ -88,7 +88,7 @@ impl ProfilesIO for G600 {
     fn write_profiles(&mut self, profiles: &Profiles) -> Result<()> {
         for profile in &profiles.profiles {
             self.write_profile(profile)?;
-            sleep(Duration::from_millis(300)); // 200 not enough: leads to intermixed profiles
+            sleep(Duration::from_millis(400)); // 300 not enough: leads to intermixed profiles
         }
         Ok(())
     }
