@@ -143,7 +143,7 @@ pub struct Profile {
     )]
     led_color: Color,
     led_effect: LedEffect,
-    led_duration: u8, // 0 to 15 seconds
+    led_duration: u8,
     #[serde(skip_serializing, default)]
     unknown1: [u8; 5],
     report_rate: ReportRate,
